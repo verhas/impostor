@@ -20,8 +20,8 @@ public class ClassNameChanger {
     private static class ClassNameChangerAdapter extends ClassVisitor {
         final String name;
 
-        private ClassNameChangerAdapter(int api, ClassVisitor classVisitor, final String name) {
-            super(api, classVisitor);
+        private ClassNameChangerAdapter(ClassVisitor classVisitor, final String name) {
+            super(Opcodes.ASM9, classVisitor);
             this.name = name.replace('.', '/');
         }
 
@@ -41,7 +41,7 @@ public class ClassNameChanger {
     public static byte[] rename(final String name, final byte[] classFile) {
         ClassReader cr = new ClassReader(classFile);
         ClassWriter cw = new ClassWriter(cr, 0);
-        ClassVisitor cv = new ClassNameChangerAdapter(Opcodes.ASM9, cw, name);
+        ClassVisitor cv = new ClassNameChangerAdapter(cw, name);
         cr.accept(cv, 0);
         return cw.toByteArray();
     }

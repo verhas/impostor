@@ -17,12 +17,12 @@ public class ImpostorClassLoader extends ClassLoader {
     private final Map<String, String> impostorMap = new HashMap<>();
     private Function<String, Optional<String>> impostorMapper = s -> Optional.empty();
 
-    private synchronized ImpostorClassLoader add(final String from, final String to) {
+    private synchronized void add(final String from, final String to) {
         impostorMap.put(from, to);
-        return this;
     }
 
-    public ImpostorClassLoader map(final Map.Entry<String, String>... entires) {
+    @SafeVarargs
+    public final ImpostorClassLoader map(final Map.Entry<String, String>... entires) {
         final Map<String, String> impostorMap = new HashMap<>();
         for (final var entry : entires) {
             if (impostorMap.put(entry.getKey(), entry.getValue()) != null) {
