@@ -1,11 +1,15 @@
 package com.javax0.impostor;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -35,6 +39,12 @@ public class ImpostorClassLoader extends ClassLoader {
         return this;
     }
 
+    private static String dumpDir = null;
+
+    public ImpostorClassLoader dumpDirectory(final String dumpDir) {
+        this.dumpDir = dumpDir;
+        return this;
+    }
 
     public synchronized ImpostorClassLoader mapper(final Function<String, Optional<String>> impostorMapper) {
         this.impostorMapper = impostorMapper;
@@ -72,13 +82,31 @@ public class ImpostorClassLoader extends ClassLoader {
             klass = super.loadClass(name);
         } else {
             String loadName = impostorMapper.apply(name).orElse(impostorMap.computeIfAbsent(name, s -> s));
-            byte[] classFile = ClassNameChanger.rename(name, getClassByteContent(loadName));
+            final byte[] impostorBytes = getClassByteContent(loadName);
+            final byte[] classFile;
+            if (Objects.equals(name, loadName)) {
+                classFile = impostorBytes;
+            } else {
+                classFile = ClassNameChanger.rename(loadName, name, impostorBytes);
+                dumpClass(loadName + "_" + name.substring(name.lastIndexOf(".")+1), classFile);
+                dumpClass(loadName, impostorBytes);
+            }
             klass = defineClass(name, classFile, 0, classFile.length);
             loaded.put(name, klass);
             fetchMappings(name, klass);
         }
 
         return klass;
+    }
+
+    private void dumpClass(String name, byte[] classFile) {
+        try {
+            var dumpFile = new File(dumpDir + name.replace(".", "/") + ".class");
+            dumpFile.getParentFile().mkdirs();
+            new ByteArrayInputStream(classFile).transferTo(new FileOutputStream(dumpFile));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void fetchMappings(String name, Class<?> klass) {

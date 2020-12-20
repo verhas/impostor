@@ -14,8 +14,8 @@ public class Impostor {
     }
 
     public void run() {
-        System.out.println("Impostor start");
         Stub victim = new Stub();
+        System.out.println("Impostor start");
         victim.run();
         System.out.println("Impostor end");
     }

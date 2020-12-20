@@ -105,6 +105,11 @@
             <artifactId>asm-util</artifactId>
             <version>9.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>9.0</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
