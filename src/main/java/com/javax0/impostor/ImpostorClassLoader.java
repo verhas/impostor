@@ -68,7 +68,7 @@ public class ImpostorClassLoader extends ClassLoader {
         if ((klass = loaded.get(name)) != null) {
             return klass;
         }
-        if (name.startsWith("java.") || name.equals(Impersonate.class.getName())) {
+        if (name.startsWith("java.") || name.equals(Impersonate.class.getName()) || name.equals(Impersonates.class.getName())) {
             klass = super.loadClass(name);
         } else {
             String loadName = impostorMapper.apply(name).orElse(impostorMap.computeIfAbsent(name, s -> s));
