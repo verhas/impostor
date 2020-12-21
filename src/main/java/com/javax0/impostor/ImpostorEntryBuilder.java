@@ -4,7 +4,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 /**
- * Build a {@link Map.Entry<String,String>} to be added to the impostor mapping.
+ * Build a {@link Map.Entry Entry&lt;String,String&gt;} to be added to the impostor mapping.
  * <p>
  * The typical use of this builder is to {@code static import} the method {@link #impersonate(String) impersonate()} and
  * then write
