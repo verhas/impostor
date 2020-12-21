@@ -14,13 +14,14 @@ public class ImpostorTest {
     @DisplayName("Impostor impersonates victim in front of oblivious, configured calling .map()")
     void demoTest0() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         try (final var output = new Output()) {
-            final var oblivious = new ImpostorClassLoader()
+            final var oblivious =
+            new ImpostorClassLoader()
                 .map(
                     impersonate(Victim.class).using(Impostor.class)
                 )
                 .dumpDirectory("./dump/")
-                .load(Oblivious.class).getConstructor().newInstance();
-            oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
+                .load(Oblivious.class);
+            From.klass(oblivious).on.newInstance().call("execute");
             Assertions.assertEquals("Impostor start\n" +
                 "Victim run\n" +
                 "Impostor end\n", output.toString());
@@ -33,8 +34,8 @@ public class ImpostorTest {
         try (final var output = new Output()) {
             final var oblivious = new ImpostorClassLoader()
                 .impersonate(Victim.class).using(Impostor.class)
-                .load(Oblivious.class).getConstructor().newInstance();
-            oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
+                .load(Oblivious.class);
+            From.klass(oblivious).on.newInstance().call("execute");
             Assertions.assertEquals("Impostor start\n" +
                 "Victim run\n" +
                 "Impostor end\n", output.toString());
@@ -48,8 +49,8 @@ public class ImpostorTest {
             final var oblivious = new ImpostorClassLoader()
                 .impersonate(Victim.class).using(MultiImpostor.class)
                 .impersonate(SecondVictim.class).using(MultiImpostor.class)
-                .load(SecondOblivious.class).getConstructor().newInstance();
-            oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
+                .load(SecondOblivious.class);
+            From.klass(oblivious).on.newInstance().call("execute");
             Assertions.assertEquals("MultiImpostor run\n" +
                 "Victim run\n" +
                 "MultiImpostor ran\n" +
