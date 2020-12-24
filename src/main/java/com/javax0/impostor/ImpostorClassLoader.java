@@ -1,9 +1,6 @@
 package com.javax0.impostor;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,10 +36,10 @@ public class ImpostorClassLoader extends ClassLoader {
         return this;
     }
 
-    private static String dumpDir = null;
+    private static ClassDumper dumper = null;
 
     public ImpostorClassLoader dumpDirectory(final String dumpDir) {
-        this.dumpDir = dumpDir;
+        this.dumper = new ClassDumper(dumpDir);
         return this;
     }
 
@@ -88,8 +85,8 @@ public class ImpostorClassLoader extends ClassLoader {
                 classFile = impostorBytes;
             } else {
                 classFile = ClassNameChanger.rename(loadName, name, impostorBytes);
-                dumpClass(loadName + "_" + name.substring(name.lastIndexOf(".")+1), classFile);
-                dumpClass(loadName, impostorBytes);
+                dumper.dump(loadName + "_" + name.substring(name.lastIndexOf(".")+1), classFile);
+                dumper.dump(loadName, impostorBytes);
             }
             klass = defineClass(name, classFile, 0, classFile.length);
             loaded.put(name, klass);
@@ -99,15 +96,7 @@ public class ImpostorClassLoader extends ClassLoader {
         return klass;
     }
 
-    private void dumpClass(String name, byte[] classFile) {
-        try {
-            var dumpFile = new File(dumpDir + name.replace(".", "/") + ".class");
-            dumpFile.getParentFile().mkdirs();
-            new ByteArrayInputStream(classFile).transferTo(new FileOutputStream(dumpFile));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private void fetchMappings(String name, Class<?> klass) {
         final var replaces = getImpersonates(klass);

@@ -1,0 +1,42 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+group 'com.javax0'
+version '1.0.0-SNAPSHOT'
+
+def ASM_VERSION = '9.0'
+def ASM_PREFIX = 'org.ow2.asm:asm'
+def JUNIT_VERSION = '5.7.0'
+def JUNIT_PREFIX = 'org.junit.jupiter:junit-jupiter'
+project.
+sourceCompatibility=15
+
+//apply plugin: 'java'
+//apply plugin: 'maven-publish'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+
+    implementation ASM_PREFIX + ':' + ASM_VERSION
+    implementation ASM_PREFIX + '-util:' + ASM_VERSION
+    implementation ASM_PREFIX + '-commons:' + ASM_VERSION
+    testImplementation JUNIT_PREFIX + '-api:' + JUNIT_VERSION
+    testImplementation JUNIT_PREFIX + '-engine:' + JUNIT_VERSION
+}
+
+test.doLast {
+    println "Test are really done."
+}
+test.doLast {
+        println "Test are done."
+    }
+
