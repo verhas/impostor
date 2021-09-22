@@ -8,7 +8,8 @@ import java.lang.annotation.RetentionPolicy;
  * When a class loaded by the {@link ImpostorClassLoader} has one or more {@code @Impersonate} annotations they can define
  * more impostor classes.
  * <p>
- * <br> Single class specified <br>-----------------------
+ * <br> Single class specified
+ * <br>-----------------------
  * <p>
  * When {@code @Impersonate("...")} specifies a single class name, then it tells the class loader to load the original class
  * that the actual class is impersonating instead of the named class.
@@ -26,7 +27,8 @@ import java.lang.annotation.RetentionPolicy;
  * class {@code Impostor} can reference the class it impersonates. If it was simply using the class {@code Victim} it
  * would get a reference to itself.
  * <p>
- * <br> Impostor chain <br>---------------
+ * <br> Impostor chain
+ * <br>---------------
  * <p>
  * When {@code @Impersonate("...")} specifies several classes in the format:
  *

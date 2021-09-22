@@ -24,7 +24,7 @@ public class ImpostorClassLoader extends ClassLoader {
 
     @SafeVarargs
     public final ImpostorClassLoader map(final Map.Entry<String, String>... entires) {
-        final Map<String, String> impostorMap = new HashMap<>();
+        final var impostorMap = new HashMap<String,String>();
         for (final var entry : entires) {
             if (impostorMap.put(entry.getKey(), entry.getValue()) != null) {
                 throw new IllegalArgumentException("The victim class '" +

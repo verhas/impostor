@@ -1,15 +1,15 @@
 = Impostor Classloader
 
-The Impostor Classloader can load impostor classes when they are asked to load a class.
-With this tool you can
+The Impostor Classloader can load impostor classes when asked to load a class.
+With this tool, you can
 
-* Testing
+* test
 
 ** mock final classes in tests
 
 ** mock static methods
 
-** mock objects that are not injected into the tested class from outside
+** mock objects not injected into the tested class from outside
 
 * Proxy classes
 
@@ -28,7 +28,7 @@ Add the dependency
 </dependency>
 ----
 
-After that you can start your code needin the support of the class loader as:
+After that, you can start your code needing the support of the class loader as:
 
 [souce,java]
 ----
@@ -41,20 +41,20 @@ oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
 
 The above code loads the `Oblivious` class using the impostor classloader.
 The classloader is configured to impersonate the class `Victim` using the class `Impostor`.
-After instantiating the class `Oblivious` and invoking the method `execute()` via reflection it will try to use the class `Victim`.
+After instantiating the class `Oblivious` and invoking the method `execute()` via reflection, it will use the class `Victim`.
 Instead of it will use the class `Impostor` without knowing it.
-The classloader simply gives it the class `Impostor` when it asks for the class `Victim`.
+The classloader simply gives it the class `Impostor` when it asks for `Victim`.
 
-== Impostor, Victim and Oblivious
+== Impostor, Victim, and Oblivious
 
-To use the classloader it is important to understand the roles that this pattern uses.
+It is essential to understand the roles that this pattern uses to use the classloader.
 This section describes these three roles.
 
 An **impostor** class impersonates the **victim** class.
 The impersonation takes place in front of the **oblivious** class.
 
-The impostor class usually has the same methods as the victim class and implements the same interfaces, extends the same parent class.
-A class can be an impostor, and a victim at the same time.
+The impostor class usually has the same methods as the victim class, implements the same interfaces, and extends the same parent class.
+A class can be an impostor and a victim at the same time.
 An impostor class can impersonate more than one victim class.
 A victim can be impersonated by a single impostor only.
 Every __oblivious__ class will see the __impostor__ instead of the __victim__ class.
@@ -62,16 +62,16 @@ Every class loaded by the impostor classloader is __oblivious__.
 
 == Use of the ImpostorClassLoader
 
-When an __oblivious__ class wants to use a __victim__ class it asks the Java classloader to loads the class.
-The classloader instead loads the __impostor__, and it passes that back in place of the __victim__.
-To make a class __oblivious__ the program has to load the class using the impostor classloader.
+When an __oblivious__ class wants to use a __victim__ class, it asks the Java classloader to loads the class.
+Instead, the classloader loads the __impostor__, and it passes that back in place of the __victim__.
+The program has to load the class using the impostor classloader to make a class __oblivious__.
 Any class instantiating other classes asks its classloader.
 The classloader of a class is the classloader that loaded the class.
 The __oblivious__ class loaded by the impostor classloader will ask the impostor classloader to load all the classes it needs.
 
 == Demo Example
 
-In the following we describe the simple test case you can also find in the test directory of the source code.
+In the following, we describe the simple test case you can also find in the test directory of the source code.
 We also describe what is happening.
 
 We have three classes:
@@ -96,7 +96,7 @@ void reload() throws ClassNotFoundException, NoSuchMethodException, IllegalAcces
 }
 ----
 
-The impostor classloader is configured calling the `map()` method.
+The impostor classloader is configured by calling the `map()` method.
 This configuration says that the class `Impostor` will impersonate the class `Victim`.
 This method accepts many such class pairs (it is a vararg method).
 The method `impersonate()` is a `static import` from `ImpostorEntryBuilder`.
@@ -108,12 +108,12 @@ impersonate(Victim.class).using(Impostor.class)
 ----
 
 creates a `Map.Entry` object that contains two strings.
-The strings are the name of the __victim__ class, and the name of the __impostor__ class.
+The strings are the name of the __victim__ class and the __impostor__ class.
 The method `map()` will add these to the internal mapping the impostor classloader consults to decide which class to load.
 
-Note that in the example above we used the classes and not the names of the classes.
-There is a version for both `impersonate()` and `using()` that accepts a `String`, which is the name of the class.
-That way the above line is equivalent with the following:
+Note that in the example above, we used the classes and not the names of the classes.
+There are versions for both `impersonate()` and `using()` accepting a `String` as the name of the class.
+That way, the above line is equivalent to the following:
 
 [souce,java]
 ----
@@ -122,9 +122,9 @@ impersonate(Victim.class.getName()).using(Impostor.class.getName())
 
 Use this form in case you have access only to the name of the class at the location of the caller.
 
-NOTE: The name of the class to be used is NOT the simple name and NOT the canonical name.
+NOTE: The class name is NOT the simple name and NOT the canonical name.
 You have to specify the full package name.
-When you are referring to inner classes you have to use `$` between the outer and inner class names.
+When referring to inner classes, you have to use `$` between the outer and inner class names.
 
 The impostor classloader is NOT immutable.
 You can change the configuration during its use.
@@ -138,10 +138,10 @@ final var oblivious = new ImpostorClassLoader()
 oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
 ----
 
-As the impostor class loader was configured we ask it to load the class `Oblivious`.
+As we configured the impostor class loader, we asked it to load the class `Oblivious`.
 This is done calling `load(Oblivious.class)`.
 The code can also call the `loadClass(final String name)` standard classloader method.
-Using the returned class we create an instance from it using reflection and we invoke the method `execute()`.
+We create an instance using reflection and invoke the method `execute()` using the returned class.
 
 The class `Oblivious.java` is the following (save package declarations and imports also in the latter samples):
 
@@ -154,7 +154,7 @@ public class Oblivious {
 }
 ----
 
-When the method `execute()` starts it asks the classloader to load the class `Victim`.
+When the method `execute()` starts, it asks the classloader to load the class `Victim`.
 The impostor classloader loads the `Impostor` instead and returns it as `Victim`.
 The code invokes the method `run()` on the impostor, which happens to be defined there as well.
 This method looks the following in the impostor class:
@@ -169,21 +169,21 @@ public void run() {
 }
 ----
 
-This method prints out `Impostor start`, `Impostor end` and between those two it calls a method `run()` on a class called `Stub`.
+This method prints out `Impostor start`, `Impostor end`, and between those two, it calls a method `run()` on a class called `Stub`.
 This `Stub` class is configured to be impersonated by the `Victim` class.
 The impostor classloader loads the `Victim` class when the `Impostor` asks for the class `Stub`.
 The configuration is not in the code, where we configured the relationship between the `Victim` and `Impostor`.
 It is configured inside the class `Impostor`.
 
 The impostor may need access to the victim class from time to time.
-In the example it wants to invoke the `run()` method of the victim class.
-The `Impostor.java` code cannot use the class name `Victim` for the purpose.
-If it used `Victim` it would get to itself.
-`Impostor` impersonates `Victim` in front of the oblivious classes.
-The `Impostor` was also loaded by the same impostor classloader, and therefore the class `Impostor` is also __oblivious__.
+The example wants to invoke the `run()` method of the victim class.
+The `Impostor.java` code cannot use the class name `Victim` for this purpose.
+If it used `Victim`, it would get to itself.
+So `Impostor` impersonates `Victim` in front of the oblivious classes.
+The same impostor classloader also loaded the `Impostor`; therefore, the class `Impostor` is also __oblivious__.
 
-To have access to the __victim__ class the __impostor__ needs an auxiliary class.
-This class is called in the example `Stub` and this is a `private static` inner class of the `Impostor` class:
+The __impostor__ needs an auxiliary class to access the __victim__ class.
+The name of this class in the example is `Stub`, and this is a `private static` inner class of the `Impostor` class:
 
 [source,java]
 ----
@@ -200,23 +200,23 @@ The `Impostor` class has an annotation:
 public class Impostor {
 ----
 
-This annotation is read by the classloader right after it loaded the class.
-It tells the classloader that the class `Stub` should be impersonated by some impostor.
-It does not specify which class is the impostor.
-In this case the classloader will impersonate this class with the victim of the class just loaded.
-In the demo `Stub` will be impersonated by `Victim` because `Impostor` impersonates `Victim`.
+This annotation is read by the classloader right after it loads the class.
+It tells the classloader that some impostor should impersonate the class `Stub`.
+It does not specify which class the impostor is.
+In this case, the classloader will impersonate this class with the victim of the class just loaded.
+In the demo, `Victim` will impersonate `Stub` because `Impostor` impersonates `Victim`.
 
-There can be many `@Impersonate` annotations on a class and each can define an impersonation chain.
+There can be many `@Impersonate` annotations on a class, and each can define an impersonation chain.
 It can have the format
 
    A -> B -> C -> D -> ... -> X -> Y
 
-This format specifies that the class `A` will be impersonated by class `B`, class `B` by class `C` and so on.
+This format specifies that the class `B` will impersonate class `A`, class `C` will impersonate class `B`, and so on.
 
-If you look at the actual code of the `Stub` you may see that there are some `System.out.print` commands in it.
-These are there only for demonstration purposes only to see that they never get printed.
-The class `Stub` is used by the compiler, but it is never loaded by the impostor classloader.
-If the victim is not `final` then the simplest solution is to create a `private static` inner class as stub that extends the victim class.
+If you look at the actual code of the `Stub`, you may see some `System.out.print` commands in it.
+These are there only for demonstration purposes, only to see that they never get printed.
+The compiler uses the class `Stub`, but the impostor classloader never loads it.
+If the victim is not `final`, the simplest solution is to create a `private static` inner class as a stub that extends the victim class.
 
 Executing the code will print out
 
@@ -227,12 +227,12 @@ Victim run
 Impostor end
 ----
 
-The `Oblivious` class was asking for an instance of the `Victim` class but it got the `Impostor`.
+The `Oblivious` class asked for an instance of the `Victim` class, but it got the `Impostor`.
 The `Impostor` printed out `Impostor start` and `Impostor end`.
-Between the two it was asking for the `Stub` but it was also configured using the `@Impersonate` annotation.
+Between the two, it asked for the `Stub`, but we also configured it using the `@Impersonate` annotation.
 This annotation told the `ImpostorClassLoader`,
 
-__"Hey, I will ask for `Stub` but whenever I do you should give me the `Victim` "__
+__"Hey, I will ask for `Stub`, but whenever I do, you should give me the `Victim` "__
 
 The `run()` method in the `Victim.java` class is
 
@@ -241,47 +241,47 @@ The `run()` method in the `Victim.java` class is
 public void run() { System.out.println("Victim run"); }
 ----
 
-That way when the `Impostor` called `run()` it printed out the middle line: `Victim run`.
+That way, when the `Impostor` called `run()`, it printed out the middle line: `Victim run`.
 
 == Limitations: Impersonating `java.*` classes
 
-Currently, it is not possible to impersonate classes that are in the packages `java.lang`, `java.io` ... and so on packages.
-This is because the Java protection mechanisms do not let any classloader other than the system classloader to load these classes.
+Currently, it is impossible to impersonate classes in the packages `java.lang`, `java.io` ... and so on packages.
+The Java protection mechanisms do not let any classloader other than the system classloader load these classes.
 Later versions of this library will support impersonating even these classes.
 
 == Roadmap
 
-This is a hobby project.
+It is a hobby project.
 
 The idea came from a https://github.com/junit-pioneer/junit-pioneer/issues/378[request]
 from https://github.com/lukaseder:[Lukas Eder]
 to the https://github.com/junit-pioneer/junit-pioneer[Junit Pioneer]
 project.
-He asked for a unit test tool that can calculate method level test coverage for a defined set of tests.
+He asked for a unit test tool to calculate method-level test coverage for a defined set of tests.
 
 The tool is not extensively tested.
-This is more like an experiment at the current stage rather than a tool.
-This is the very reason I do not create a release from it into the Maven central at the moment.
+It is more like an experiment at the current stage rather than a tool.
+It is the very reason I do not create a release from it into the Maven central at the moment.
 
-Concurrent, multi-thread execution was not verified, though the code was designed to work in concurrent environment.
+Concurrent, multi-thread execution was not verified, though I designed the code to work in a concurrent environment.
 
-We have some plans, but only in case they make sense.
+I have some plans, but only in case they make sense.
 I have some reservations before I invest more work into this making it a tool.
 You can use this classloader to test applications mocking some classes.
-This is a special use case, but when you need this it means your code already suffers and not well-designed.
+It is a particular use case, but when you need this, it means your code already suffers and is not well-designed.
 
-You can use this classloader to implement aspect oriented programming.
-For the purpose you can use AspectJ that is a well-developed product and provides different types of implementation.
+You can use this classloader to implement aspect-oriented programming.
+For this purpose, you can use AspectJ, a well-developed product and provides different implementation types.
 One of them is similar to what this classloader does.
 
-We plan to extend the classloader to be able to impersonate `java.*` package classes as well but only in case we find real use cases for this classloader.
+We plan to extend the classloader to impersonate `java.*` package classes, but only if we find real use cases for this classloader.
 
 == Contribution
 
 First of all: any comment is welcome.
 
-If you have a use case, tell us.
-Feel free to open an issue, even if there is no "issue" just to give us an idea.
+If you have a use case, please tell us.
+Feel free to open an issue, even if there is no "issue", to give us an idea.
 Feel free to open an issue, is there is some feature that is missing.
 Documentation typo: open an issue.
 Bug: open an issue.
