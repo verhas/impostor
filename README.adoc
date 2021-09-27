@@ -41,8 +41,8 @@ oblivious.getClass().getDeclaredMethod("execute").invoke(oblivious);
 
 The above code loads the `Oblivious` class using the impostor classloader.
 The classloader is configured to impersonate the class `Victim` using the class `Impostor`.
-After instantiating the class `Oblivious` and invoking the method `execute()` via reflection, it will use the class `Victim`.
-Instead of it will use the class `Impostor` without knowing it.
+After instantiating the class `Oblivious` and invoking the method `execute()` via reflection, it tries to use the class `Victim`.
+Instead of it will get the class `Impostor` without knowing it.
 The classloader simply gives it the class `Impostor` when it asks for `Victim`.
 
 == Impostor, Victim, and Oblivious
@@ -54,6 +54,8 @@ An **impostor** class impersonates the **victim** class.
 The impersonation takes place in front of the **oblivious** class.
 
 The impostor class usually has the same methods as the victim class, implements the same interfaces, and extends the same parent class.
+It is not a strong requirement of the pattern, but failing to do so may result in some exception or error.
+
 A class can be an impostor and a victim at the same time.
 An impostor class can impersonate more than one victim class.
 A victim can be impersonated by a single impostor only.

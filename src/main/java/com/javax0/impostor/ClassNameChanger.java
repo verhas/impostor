@@ -20,7 +20,7 @@ public class ClassNameChanger {
     }
 
     /**
-     * Convert the byte array so that the returned byte array will contains the new name.
+     * Convert the byte array so that the returned byte array will contain the new name.
      *
      * @param from      the old name of the class
      * @param to        the new name we want the class to have
@@ -28,18 +28,21 @@ public class ClassNameChanger {
      * @return the modified class that is the same as the old one, but with the new name
      */
     public static byte[] rename(final String from, final String to, final byte[] classFile) {
-        ClassReader cr = new ClassReader(classFile);
-        ClassWriter cw = new ClassWriter(cr, 0);
-        final String oldName = from.replace('.', '/');
-        Remapper remapper = new Remapper() {
+        final var oldName = from.replace('.', '/');
+        final var newName = to.replace('.', '/');
+
+        final var remapper = new Remapper() {
             @Override
             public String map(String internalName) {
                 if (internalName.equals(oldName))
-                    return to.replace('.', '/');
+                    return newName;
                 else
                     return internalName;
             }
         };
+
+        final var cr = new ClassReader(classFile);
+        final var cw = new ClassWriter(cr, 0);
         ClassVisitor cvR = new ClassRemapper(cw, remapper);
         cr.accept(cvR, 0);
         return cw.toByteArray();

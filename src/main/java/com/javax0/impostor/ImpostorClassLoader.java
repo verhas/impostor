@@ -101,7 +101,7 @@ public class ImpostorClassLoader extends ClassLoader {
     private void fetchMappings(String name, Class<?> klass) {
         final var replaces = getImpersonates(klass);
         for (final var replace : replaces) {
-            String[] fromTo = replace.split("\\s*->\\s*");
+            final var fromTo = replace.split("\\s*->\\s*");
             if (fromTo.length < 2) {
                 add(replace, name);
             } else {

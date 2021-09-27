@@ -43,7 +43,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p>
  * The names are the names of the class. Not simple names and not canonical names. The name should contain the full
  * package the class is in. In case of an inner class the character {@code $} has to be used to separate the class names
- * after the outer most top level class down to the specified inner class. As an example, see the above
+ * after the outermost top level class down to the specified inner class. As an example, see the above
  *
  * <pre>
  * {@literal @}Impersonate("com.javax0.impostor.Impostor$Stub")
